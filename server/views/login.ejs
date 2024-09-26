@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <form method="POST">
+      <label for="username">Username</label>
+      <input type="text" name="username" id="username" />
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" />
+      <input type="submit" value="Login" />
+    </form>
+    <script>
+      const form = document.querySelector('form')
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const username = document.querySelector('#username').value
+        const password = document.querySelector('#password').value
+        fetch('/api/user/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data._id) {
+              // Redirect to dashboard using res.redirect
+              window.location.href = '/dashboard'
+            } else {
+              // Handle login failure
+              console.error('Invalid username or password')
+            }
+          })
+          .catch((error) => {
+            console.error('Error logging in:', error)
+          })
+      })
+    </script>
+  </body>
+</html>
